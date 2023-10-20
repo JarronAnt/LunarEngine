@@ -30,7 +30,7 @@ namespace lunar {
 		if(_isInitialized == false){
         	
 		
-			std::cout <<"PASS" << std::endl;
+			std::cout <<"PASS (engine.cpp init fn)" << std::endl;
 			_LogManager.Initialize();
 			GetInfo();
 

@@ -15,6 +15,9 @@ odir = "bin-obj/%{cfg.buildcfg}/%{prj.name}"
 externals = {}
 externals["sdl2"] = "external/sdl2"
 externals["spdlog"] = "external/spdlog"
+externals["glad"] = "external/glad"
+
+include "external/glad"
 
 project "lunar"
     location "lunar"
@@ -43,6 +46,11 @@ project "lunar"
     flags
     {
         "FatalWarnings"
+    }
+
+    defines
+    {
+        "GLFW_INCLUDE_NONE" -- Ensures glad doesn't include glfw
     }
 
     filter {"system:windows", "configurations:*"}
@@ -130,7 +138,8 @@ project "lunareditor"
 
         links
         {
-            "SDL2"
+            "SDL2",
+            "glad"
         }
 
     filter {"system:macosx", "configurations:*"}
