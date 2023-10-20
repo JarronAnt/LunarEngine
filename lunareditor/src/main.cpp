@@ -1,5 +1,8 @@
-#include<stdio.h>
+#include<iostream>
+#include "lunar/engine.h"
 
 void main(void){
-    printf("Hello\n");
+    lunar::GetInfo();
+    lunar::Init();
+    lunar::Shutdown();
 }
