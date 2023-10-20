@@ -1,6 +1,6 @@
 #pragma once
 #include "core/window.h"
-#include "core/managers/logmanager.h"
+#include "managers/logmanager.h"
 
 namespace lunar {
 
