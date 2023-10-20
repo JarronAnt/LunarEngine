@@ -1,5 +1,6 @@
 #pragma once
 #include "core/window.h"
+#include "core/managers/logmanager.h"
 
 namespace lunar {
 
@@ -23,7 +24,10 @@ namespace lunar {
             void Shutdown();
             bool _isRunning;
             core::Window _window;
+            bool _isInitialized = false;
 
+            // Managers
+            managers::LogManager _LogManager;   
 
     };  
 }

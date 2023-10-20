@@ -1,57 +1,70 @@
 #include "engine.h"
 #include <iostream>
 #include "sdl2/SDL.h"
+#include "log.h"
 
 namespace lunar {
      void Engine::GetInfo()
     {
-    #ifdef LUNAR_CONFIG_DEBUG
-        std::cout << "Configuration: DEBUG" << std::endl;
-    #endif
-    #ifdef LUNAR_CONFIG_RELEASE
-        std::cout << "Configuration: RELEASE" << std::endl;
-    #endif
-    #ifdef LUNAR_PLATFORM_WINDOWS
-        std::cout << "Platform: WINDOWS" << std::endl;
-    #endif
-    #ifdef LUNAR_PLATFORM_LINUX
-        std::cout << "Platform: LINUX" << std::endl;
-    #endif
-    #ifdef LUNAR_PLATFORM_MAC
-        std::cout << "Platform: MAC" << std::endl;
-    #endif
+		LUNAR_TRACE("LunarEngine v{}.{}", 0, 1);
+#ifdef LUNAR_CONFIG_DEBUG
+		LUNAR_DEBUG("Configuration: DEBUG");
+#endif
+#ifdef LUNAR_CONFIG_RELEASE
+		LUNAR_DEBUG("Configuration: RELEASE");
+#endif
+#ifdef LUNAR_PLATFORM_WINDOWS
+		LUNAR_WARN("Platform: WINDOWS");
+#endif
+#ifdef LUNAR_PLATFORM_LINUX
+		LUNAR_WARN("Platform: LINUX");
+#endif
+#ifdef LUNAR_PLATFORM_MAC
+		LUNAR_WARN("Platform: MAC");
+#endif
     }
 
     bool Engine::Init() {
-        bool val = true;
+		bool val = false;
+		LUNAR_ASSERT(!_isInitialized, "Attempting to call Engine::Initialize() more than once!"); //note this isnt an error idk why its showing as if it is 
+		if(_isInitialized == false){
+        	
+		
+			std::cout <<"PASS" << std::endl;
+			_LogManager.Initialize();
+			GetInfo();
 
-        if(SDL_Init(SDL_INIT_EVERYTHING) < 0 ) {
-            std::cout << "Error initalizing SDL2" << SDL_GetError()<< std::endl;
-            val = false;
-        }else {
-            SDL_version version;
-            SDL_VERSION(&version);
-            std::cout << "SDL Version: " << (int)version.major << "." << (int)version.minor << "." << (int)version.patch << std::endl;
-
-            if (_window.Create())
+			if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 			{
-				val = true;
-				_isRunning = true;
+				LUNAR_ERROR("Error initializing SDL2: {}", SDL_GetError());
 			}
-        }
+			else
+			{
+				SDL_version version;
+				SDL_VERSION(&version);
+				LUNAR_INFO("SDL {}.{}.{}", (int32_t)version.major, (int32_t)version.minor, (int32_t)version.patch);
 
-        if (!val)
-		{
-			std::cout << "Engine initialization failed. Shutting down." << std::endl;
-			Shutdown();
+				if (_window.Create())
+				{
+					val = true;
+					_isRunning = true;
+					_isInitialized = true;
+				}
+			}
+
+			if (!val)
+			{
+				LUNAR_ERROR("Engine initialization failed. Shutting down.");
+				Shutdown();
+			}
 		}
-
-
-        return val;
+		return val;
     }
 
     void Engine::Shutdown(){
         _isRunning = false;
+        _isInitialized = false;
+        _LogManager.Shutdown();
 		_window.Shutdown();
         SDL_Quit();
     }
