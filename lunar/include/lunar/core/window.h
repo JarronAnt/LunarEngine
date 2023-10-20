@@ -1,6 +1,7 @@
 #pragma once
 
 struct SDL_Window;
+using SDL_GLContext = void*;
 namespace lunar::core
 {
 	class Window
@@ -14,7 +15,11 @@ namespace lunar::core
 
 		void PumpEvents();
 
+		void BeginRender();
+		void EndRender();
+
 	private:
 		SDL_Window* _window;
+		SDL_GLContext _GLContext;
 	};
 }

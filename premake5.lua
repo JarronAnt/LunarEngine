@@ -40,7 +40,8 @@ project "lunar"
     {
         "%{prj.name}/include/lunar",
         "%{externals.sdl2}/include",
-        "%{externals.spdlog}/include"
+        "%{externals.spdlog}/include",
+        "%{externals.glad}/include"
     }
 
     flags

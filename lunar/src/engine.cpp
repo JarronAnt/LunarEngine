@@ -85,6 +85,8 @@ namespace lunar {
 			while (_isRunning)
 			{
 				_window.PumpEvents();
+				_window.BeginRender();
+				_window.EndRender();
 			}
 
 			Shutdown();
