@@ -14,6 +14,7 @@ odir = "bin-obj/%{cfg.buildcfg}/%{prj.name}"
 -- External Dependencies
 externals = {}
 externals["sdl2"] = "external/sdl2"
+externals["spdlog"] = "external/spdlog"
 
 project "lunar"
     location "lunar"
@@ -35,7 +36,8 @@ project "lunar"
     sysincludedirs
     {
         "%{prj.name}/include/lunar",
-        "%{externals.sdl2}/include"
+        "%{externals.sdl2}/include",
+        "%{externals.spdlog}/include"
     }
 
     flags
