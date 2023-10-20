@@ -3,7 +3,7 @@
 #include "sdl2/SDL.h"
 
 namespace lunar {
-     void GetInfo()
+     void Engine::GetInfo()
     {
     #ifdef LUNAR_CONFIG_DEBUG
         std::cout << "Configuration: DEBUG" << std::endl;
@@ -22,7 +22,7 @@ namespace lunar {
     #endif
     }
 
-    bool Init() {
+    bool Engine::Init() {
         bool val = true;
 
         if(SDL_Init(SDL_INIT_EVERYTHING) < 0 ) {
@@ -32,12 +32,55 @@ namespace lunar {
             SDL_version version;
             SDL_VERSION(&version);
             std::cout << "SDL Version: " << (int)version.major << "." << (int)version.minor << "." << (int)version.patch << std::endl;
+
+            if (_window.Create())
+			{
+				val = true;
+				_isRunning = true;
+			}
         }
+
+        if (!val)
+		{
+			std::cout << "Engine initialization failed. Shutting down." << std::endl;
+			Shutdown();
+		}
+
 
         return val;
     }
 
-    void Shutdown(){
+    void Engine::Shutdown(){
+        _isRunning = false;
+		_window.Shutdown();
         SDL_Quit();
+    }
+
+    Engine& Engine::instance(){
+        if(!_instance){
+            _instance = new Engine();
+        }
+
+        return *_instance;
+    }
+
+    void Engine::Run()
+	{
+		if (Init())
+		{
+			// core loop
+			while (_isRunning)
+			{
+				_window.PumpEvents();
+			}
+
+			Shutdown();
+		}
+	}
+
+    Engine* Engine::_instance = nullptr;
+
+    Engine::Engine(): _isRunning(false){
+        GetInfo();
     }
 }

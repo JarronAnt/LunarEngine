@@ -2,7 +2,7 @@
 #include "lunar/engine.h"
 
 void main(void){
-    lunar::GetInfo();
-    lunar::Init();
-    lunar::Shutdown();
+
+    lunar::Engine& engine = lunar::Engine::instance();
+    engine.Run();
 }
